@@ -88,9 +88,7 @@ kickButton.addEventListener("click", ()=> {
 		channelData[i] = Math.random() * 2 -1;
 	}
 */	
-	const gainControl = audioContext.createGain();
-		gainControl.gain.setValueAtTime(0, 0.5, 0);
-		gainControl.connect(audioContext.destination);
+	
 /*
 	const whiteNoiseSource =
  		audioContext.createBufferSource();
@@ -101,7 +99,15 @@ kickButton.addEventListener("click", ()=> {
 		*/
 	const osc = 
 		audioContext.createOscillator();
-		osc.frequency.setValueAtTime(261.6,0)
+		osc.frequency.setValueAtTime(150,0);
+		osc.frequency.exponentialRampToValueAtTime(
+			0.01,
+			audioContext.currentTime + 0.5
+		)
+
+	const gainControl = audioContext.createGain();
+		gainControl.gain.setValueAtTime(12, 0);
+		gainControl.connect(audioContext.destination);
 		osc.connect(gainControl); 
 		osc.start();
 })
@@ -169,23 +175,28 @@ document.addEventListener('keydown', (event) => {
 			const kickAudioContext = new AudioContext();
 
 
-	const kickGainControl = kickAudioContext.createGain();
-		kickGainControl.gain.setValueAtTime(0, 0.5, 0);
-		kickGainControl.connect(kickAudioContext.destination);
-
+	
+/*
 	const kickFilter = 
 		kickAudioContext.createBiquadFilter();
 		kickFilter.type = "highpass";
 		kickFilter.frequency.value = 5000;
 		kickFilter.connect(kickGainControl);
-
+*/
 	const osc = 
 		kickAudioContext.createOscillator();
 		osc.frequency.setValueAtTime(150,0);
 		osc.frequency.exponentialRampToValueAtTime(
-			0.001,
-			kickAudioContext.currentTime * 0.
+			0.01,
+			kickAudioContext.currentTime + 0.5
 		)
+	const kickGainControl = kickAudioContext.createGain();
+		kickGainControl.gain.setValueAtTime(12, 0);
+		kickGainControl.gain.exponentialRampToValueAtTime(
+			0.001, 
+			kickAudioContext.currentTime + 0.5
+		);
+		kickGainControl.connect(kickAudioContext.destination);
 		osc.connect(kickGainControl); 
 		osc.start();
 		break;
